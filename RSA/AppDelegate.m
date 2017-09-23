@@ -7,12 +7,25 @@
 //
 
 #import "AppDelegate.h"
+#import "RSA.h"
 
 @implementation AppDelegate
+
+- (void)setupRSA {
+    RSA *rsa = [RSA sharedInstance];
+    
+    // configure identifier used for storing keys in the keychain
+    [rsa setIdentifierForPublicKey:@"com.reejosamuel.PublicKey"
+                        privateKey:@"com.reejosamuel.PrivateKey"
+                   serverPublicKey:@"com.reejosamuel.ServerPublicKey"];
+    
+    [rsa setRSAKeySize:k1024];
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    [self setupRSA];
     return YES;
 }
 							

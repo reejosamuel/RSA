@@ -23,6 +23,11 @@
 		195A476B18B24EBA00FF1821 /* RSATests.m in Sources */ = {isa = PBXBuildFile; fileRef = 195A476A18B24EBA00FF1821 /* RSATests.m */; };
 		195A477618B2550300FF1821 /* RSA.m in Sources */ = {isa = PBXBuildFile; fileRef = 195A477418B2550300FF1821 /* RSA.m */; };
 		195A477818B25A0300FF1821 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 195A477718B25A0300FF1821 /* Security.framework */; };
+		DE2D3B401F7567FB002A791B /* MobileGenerateVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE2D3B3F1F7567FA002A791B /* MobileGenerateVC.swift */; };
+		DE2D3B441F76499F002A791B /* DecryptMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE2D3B431F76499F002A791B /* DecryptMessage.swift */; };
+		DE2D3B461F7650C1002A791B /* EncryptMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE2D3B451F7650C1002A791B /* EncryptMessage.swift */; };
+		DE95313A1F767863000CEF9A /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9531391F767863000CEF9A /* MainViewController.swift */; };
+		DE95313C1F76CBCB000CEF9A /* SavePublicKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE95313B1F76CBCB000CEF9A /* SavePublicKey.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +63,13 @@
 		195A477418B2550300FF1821 /* RSA.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSA.m; sourceTree = "<group>"; };
 		195A477518B2550300FF1821 /* RSA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSA.h; sourceTree = "<group>"; };
 		195A477718B25A0300FF1821 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		DE2D3B371F7560D6002A791B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
+		DE2D3B381F75666B002A791B /* RSA-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RSA-Bridging-Header.h"; sourceTree = "<group>"; };
+		DE2D3B3F1F7567FA002A791B /* MobileGenerateVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MobileGenerateVC.swift; path = RSA/Swift/MobileGenerateVC.swift; sourceTree = SOURCE_ROOT; };
+		DE2D3B431F76499F002A791B /* DecryptMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecryptMessage.swift; sourceTree = "<group>"; };
+		DE2D3B451F7650C1002A791B /* EncryptMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncryptMessage.swift; sourceTree = "<group>"; };
+		DE9531391F767863000CEF9A /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		DE95313B1F76CBCB000CEF9A /* SavePublicKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavePublicKey.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +101,7 @@
 			isa = PBXGroup;
 			children = (
 				195A474518B24EBA00FF1821 /* RSA */,
+				DE95313E1F76CF4D000CEF9A /* ObjC classes */,
 				195A476418B24EBA00FF1821 /* RSATests */,
 				195A473E18B24EBA00FF1821 /* Frameworks */,
 				195A473D18B24EBA00FF1821 /* Products */,
@@ -119,15 +132,14 @@
 		195A474518B24EBA00FF1821 /* RSA */ = {
 			isa = PBXGroup;
 			children = (
-				195A477518B2550300FF1821 /* RSA.h */,
-				195A477418B2550300FF1821 /* RSA.m */,
+				DE2D3B3E1F7567D1002A791B /* Swift */,
+				DE95313D1F76CF43000CEF9A /* RSA */,
 				195A474E18B24EBA00FF1821 /* AppDelegate.h */,
 				195A474F18B24EBA00FF1821 /* AppDelegate.m */,
 				195A475118B24EBA00FF1821 /* Main.storyboard */,
-				195A475418B24EBA00FF1821 /* ViewController.h */,
-				195A475518B24EBA00FF1821 /* ViewController.m */,
 				195A475718B24EBA00FF1821 /* Images.xcassets */,
 				195A474618B24EBA00FF1821 /* Supporting Files */,
+				DE2D3B381F75666B002A791B /* RSA-Bridging-Header.h */,
 			);
 			path = RSA;
 			sourceTree = "<group>";
@@ -159,6 +171,36 @@
 				195A476718B24EBA00FF1821 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		DE2D3B3E1F7567D1002A791B /* Swift */ = {
+			isa = PBXGroup;
+			children = (
+				DE2D3B3F1F7567FA002A791B /* MobileGenerateVC.swift */,
+				DE2D3B431F76499F002A791B /* DecryptMessage.swift */,
+				DE2D3B451F7650C1002A791B /* EncryptMessage.swift */,
+				DE9531391F767863000CEF9A /* MainViewController.swift */,
+				DE95313B1F76CBCB000CEF9A /* SavePublicKey.swift */,
+			);
+			path = Swift;
+			sourceTree = "<group>";
+		};
+		DE95313D1F76CF43000CEF9A /* RSA */ = {
+			isa = PBXGroup;
+			children = (
+				195A477518B2550300FF1821 /* RSA.h */,
+				195A477418B2550300FF1821 /* RSA.m */,
+			);
+			path = RSA;
+			sourceTree = "<group>";
+		};
+		DE95313E1F76CF4D000CEF9A /* ObjC classes */ = {
+			isa = PBXGroup;
+			children = (
+				195A475418B24EBA00FF1821 /* ViewController.h */,
+				195A475518B24EBA00FF1821 /* ViewController.m */,
+			);
+			path = "ObjC classes";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -205,9 +247,12 @@
 		195A473418B24EBA00FF1821 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0500;
+				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = "Clapp Inc";
 				TargetAttributes = {
+					195A473B18B24EBA00FF1821 = {
+						LastSwiftMigration = 0900;
+					};
 					195A475C18B24EBA00FF1821 = {
 						TestTargetID = 195A473B18B24EBA00FF1821;
 					};
@@ -258,10 +303,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DE2D3B461F7650C1002A791B /* EncryptMessage.swift in Sources */,
 				195A475618B24EBA00FF1821 /* ViewController.m in Sources */,
+				DE2D3B441F76499F002A791B /* DecryptMessage.swift in Sources */,
 				195A475018B24EBA00FF1821 /* AppDelegate.m in Sources */,
+				DE2D3B401F7567FB002A791B /* MobileGenerateVC.swift in Sources */,
+				DE95313C1F76CBCB000CEF9A /* SavePublicKey.swift in Sources */,
 				195A477618B2550300FF1821 /* RSA.m in Sources */,
 				195A474C18B24EBA00FF1821 /* main.m in Sources */,
+				DE95313A1F767863000CEF9A /* MainViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -296,6 +346,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				195A475218B24EBA00FF1821 /* Base */,
+				DE2D3B371F7560D6002A791B /* en */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -315,23 +366,34 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -344,7 +406,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 			};
@@ -354,30 +416,40 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -388,10 +460,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RSA/RSA-Prefix.pch";
 				INFOPLIST_FILE = "RSA/RSA-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.reejosamuel.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "RSA/RSA-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -401,10 +480,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RSA/RSA-Prefix.pch";
 				INFOPLIST_FILE = "RSA/RSA-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.reejosamuel.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "RSA/RSA-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -412,7 +497,7 @@
 		195A477218B24EBA00FF1821 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/RSA.app/RSA";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
@@ -426,6 +511,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "RSATests/RSATests-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.reejosamuel.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
@@ -435,7 +521,7 @@
 		195A477318B24EBA00FF1821 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/RSA.app/RSA";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
@@ -445,6 +531,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RSA/RSA-Prefix.pch";
 				INFOPLIST_FILE = "RSATests/RSATests-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.reejosamuel.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;

@@ -26,15 +26,14 @@
     }
 #endif
 
-const size_t kSecAttrKeySizeInBitsLength = 2024;
-
 @interface RSA (){
 @private
     NSData * publicTag;
 	NSData * privateTag;
     NSData * serverPublicTag;
     NSOperationQueue * cryptoQueue;
-    GenerateSuccessBlock success;
+    RSACompletionBlock _completion;
+    size_t kSecAttrKeySizeInBitsLength;
 }
 
 @property (strong, nonatomic) NSString * publicIdentifier;
@@ -60,13 +59,15 @@ const size_t kSecAttrKeySizeInBitsLength = 2024;
 
 #pragma mark - Instance Variables
 
-- (id)init{
+- (id)init {
     if (self = [super init]) {
         cryptoQueue = [[NSOperationQueue alloc] init];
-    }return self;
+        kSecAttrKeySizeInBitsLength = k2048;
+    }
+    return self;
 }
 
-+ (id)sharedInstance{
++ (instancetype)sharedInstance{
     static RSA *_rsa = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -77,13 +78,16 @@ const size_t kSecAttrKeySizeInBitsLength = 2024;
 
 #pragma mark - Set identifier strings
 
-- (void)setIdentifierForPublicKey:(NSString *)pubIdentifier
-                       privateKey:(NSString *)privIdentifier
-                  serverPublicKey:(NSString *)servPublicIdentifier {
+- (void)setIdentifierForPublicKey:(nullable NSString *)pubIdentifier
+                       privateKey:(nullable NSString *)privIdentifier
+                  serverPublicKey:(nullable NSString *)servPublicIdentifier {
     
-    self.publicIdentifier       = pubIdentifier;
-    self.privateIdentifier      = privIdentifier;
-    self.serverPublicIdentifier = servPublicIdentifier;
+    self.publicIdentifier =
+        (pubIdentifier != NULL) ? pubIdentifier : @"com.reejosamuel.rsa.pubIdentifier";
+    self.privateIdentifier =
+        (privIdentifier != NULL) ? privIdentifier : @"com.reejosamuel.rsa.privIdentifier";
+    self.serverPublicIdentifier =
+        (servPublicIdentifier != NULL) ? servPublicIdentifier : @"com.reejosamuel.rsa.servPubIdentifier";
     
     // Tag data to search for keys.
     publicTag       = [self.publicIdentifier dataUsingEncoding:NSUTF8StringEncoding];
@@ -91,13 +95,28 @@ const size_t kSecAttrKeySizeInBitsLength = 2024;
     serverPublicTag = [self.serverPublicIdentifier dataUsingEncoding:NSUTF8StringEncoding];
 }
 
+- (void)setRSAKeySize:(RSAKeySize)keySize {
+    kSecAttrKeySizeInBitsLength = keySize;
+}
+
+#pragma mark - PEM helpers
+
+
+- (NSString *)stripPEM:(NSString *)keyString {
+    NSError *error = nil;
+    NSString *pattern = @"-{5}.*-{5}\n*" ;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:NSRegularExpressionCaseInsensitive error:&error];
+    return [regex stringByReplacingMatchesInString:keyString options:0 range:NSMakeRange(0, keyString.length) withTemplate:@""];
+}
+
 #pragma mark - Java Helpers
 
 // Java helpers to remove and add extra bits needed for java based backends
 // Once it’s base 64 decoded it strips the ASN.1 encoding associated with the OID
-// and sequence encoding that generally prepends the RSA key data. That leaves it with just the large numbers that make up the public key.
-
-
+// and sequence encoding that generally prepends the RSA key data. That leaves it
+// with just the large numbers that make up the public key.
+// Read this for a clear understanding of ANS.1, BER AND PCKS encodings
+// https://stackoverflow.com/a/29707204/1460582
 
 - (NSString *)getKeyForJavaServer:(NSData*)keyBits {
     
@@ -121,7 +140,7 @@ const size_t kSecAttrKeySizeInBitsLength = 2024;
     if  ([keyBits length ] + 1  < 128 )
         bitstringEncLength = 1 ;
     else
-        bitstringEncLength = (int)(([keyBits length ] +1 ) / 256 ) + 2 ;
+        bitstringEncLength = (int)(([keyBits length] + 1 ) / 256 ) + 2;
     
     // Overall we have a sequence of a certain length
     builder[0] = 0x30;    // ASN.1 encoding representing a SEQUENCE
@@ -231,11 +250,11 @@ size_t encodeLength(unsigned char * buf, size_t length) {
 
 #pragma mark - Key generators
 
-- (void)generateKeyPairRSACompleteBlock:(GenerateSuccessBlock)_success {
+- (void)generateRSAKeyPair:(RSACompletionBlock)completion {
     NSInvocationOperation * genOp = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(generateKeyPairOperation) object:nil];
     [cryptoQueue addOperation:genOp];
     
-    success = _success;
+    _completion = completion;
 }
 
 - (void)generateKeyPairOperation{
@@ -247,8 +266,8 @@ size_t encodeLength(unsigned char * buf, size_t length) {
 }
 
 - (void)generateKeyPairCompleted{
-    if (success) {
-        success();
+    if (_completion) {
+        _completion();
     }
 }
 
@@ -285,7 +304,7 @@ size_t encodeLength(unsigned char * buf, size_t length) {
 	
 	// SecKeyGeneratePair returns the SecKeyRefs just for educational purposes.
 	sanityCheck = SecKeyGeneratePair((__bridge CFDictionaryRef)keyPairAttr, &publicKeyRef, &privateKeyRef);
-	LOGGING_FACILITY( sanityCheck == noErr && publicKeyRef != NULL && privateKeyRef != NULL, @"Something really bad went wrong with generating the key pair." );
+	LOGGING_FACILITY( sanityCheck == noErr && publicKeyRef != NULL && privateKeyRef != NULL, @"Something went wrong with generating the key pair." );
 }
 
 #pragma mark - Deletion
@@ -403,13 +422,13 @@ size_t encodeLength(unsigned char * buf, size_t length) {
 
 #pragma mark - Encrypt and Decrypt
 
-- (NSString *)rsaEncryptWithData:(NSData*)data usingPublicKey:(BOOL)yes server:(BOOL)isServer{
+- (NSString *)rsaEncryptWithData:(NSData*)data usingPublicKey:(BOOL)usePublicKey server:(BOOL)isServer{
     
     
     if (isServer) {
         [self getKeyRefFor:serverPublicTag];
     } else {
-        if (yes) {
+        if (usePublicKey) {
             [self getKeyRefFor:publicTag];
         } else {
             [self getKeyRefFor:privateTag];

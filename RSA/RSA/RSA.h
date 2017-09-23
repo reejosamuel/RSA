@@ -7,9 +7,16 @@
 
 #import <Foundation/Foundation.h>
 
-typedef void (^GenerateSuccessBlock)(void);
+typedef void (^RSACompletionBlock)(void);
 
 @interface RSA : NSObject
+
+typedef enum RSAKeySize: size_t {
+    k512 = 512,
+    k768 = 768,
+    k1024 = 1024,
+    k2048 = 2048,
+} RSAKeySize;
 
 /**
  *  Steps to Follow
@@ -24,43 +31,45 @@ typedef void (^GenerateSuccessBlock)(void);
  *        to uniquely identify the keys stored in keychain.
  */
 
-+ (id)sharedInstance;
++ (instancetype)sharedInstance;
+
 - (void)setIdentifierForPublicKey:(NSString *)pubIdentifier
                        privateKey:(NSString *)privIdentifier
                   serverPublicKey:(NSString *)servPublicIdentifier;
 
-- (void)generateKeyPairRSACompleteBlock:(GenerateSuccessBlock)_success;
+- (void)setRSAKeySize:(RSAKeySize)keySize;
 
+// Generation Methods
 
-// returns Base64 encoded strings
+- (void)generateRSAKeyPair:(RSACompletionBlock)completion;
 
-
-// Encryption Method
+// Encryption Methods
 
 - (NSString *)encryptUsingPublicKeyWithData:(NSData *)data;
-- (NSString *)encryptUsingPrivateKeyWithData:(NSData*)data;
+- (NSString *)encryptUsingPrivateKeyWithData:(NSData *)data;
+// Encrypt using Server Public Key
+- (NSString *)encryptUsingServerPublicKeyWithData:(NSData *)data;
+
 
 // Decrypt Methods
 
 - (NSString *)decryptUsingPublicKeyWithData:(NSData *)data;
-- (NSString *)decryptUsingPrivateKeyWithData:(NSData*)data;
+- (NSString *)decryptUsingPrivateKeyWithData:(NSData *)data;
 
-// SET / GET Public Key
+
+// Accessors for Public Key
 
 - (BOOL)setPublicKey:(NSString *)keyAsBase64;
 - (NSString *)getPublicKeyAsBase64;
-
 - (NSString *)getServerPublicKey;
 
-// Encrypt using Server Public Key
-
-- (NSString *)encryptUsingServerPublicKeyWithData:(NSData *)data;
-
-//  SET / GET Public key for Java Servers
+//  Public Key accessors for Java Servers
 
 - (BOOL)setPublicKeyFromJavaServer:(NSString *)keyAsBase64;
 - (NSString *)getPublicKeyAsBase64ForJavaServer;
 
+// Helpers
 
+- (NSString *)stripPEM:(NSString *)keyString;
 
 @end

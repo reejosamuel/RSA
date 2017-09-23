@@ -53,7 +53,7 @@
 - (IBAction)generateKeys:(id)sender {
     
     
-    [rsa generateKeyPairRSACompleteBlock:^{
+    [rsa generateRSAKeyPair:^{
         
         _mobilePublicKeyField.text = [rsa getPublicKeyAsBase64ForJavaServer];
         NSLog(@"Key generated and public key shown");

@@ -1,0 +1,36 @@
+
+/* Class = "UITextField"; placeholder = "Decrypted Text"; ObjectID = "0DD-4x-hVU"; */
+"0DD-4x-hVU.placeholder" = "Decrypted Text";
+
+/* Class = "UITextField"; text = "Message to Encrypt"; ObjectID = "0DD-4x-hVU"; */
+"0DD-4x-hVU.text" = "Message to Encrypt";
+
+/* Class = "UIButton"; normalTitle = "Encrypt"; ObjectID = "2F4-L1-Deh"; */
+"2F4-L1-Deh.normalTitle" = "Encrypt";
+
+/* Class = "UILabel"; text = "From Java"; ObjectID = "Edg-fY-pmJ"; */
+"Edg-fY-pmJ.text" = "From Java";
+
+/* Class = "UIButton"; normalTitle = "Set Server Key"; ObjectID = "IMl-hf-Tlq"; */
+"IMl-hf-Tlq.normalTitle" = "Set Server Key";
+
+/* Class = "UIButton"; normalTitle = "Generate Public & Private Keys"; ObjectID = "IZt-Z9-IG8"; */
+"IZt-Z9-IG8.normalTitle" = "Generate Public & Private Keys";
+
+/* Class = "UITextView"; text = "Encrypted output for server"; ObjectID = "Md3-6t-DMh"; */
+"Md3-6t-DMh.text" = "Encrypted output for server";
+
+/* Class = "UITextView"; text = "Mobile public key Encoded message to decrypt"; ObjectID = "PjS-07-vfV"; */
+"PjS-07-vfV.text" = "Mobile public key Encoded message to decrypt";
+
+/* Class = "UILabel"; text = "RSA"; ObjectID = "WR8-7i-wNd"; */
+"WR8-7i-wNd.text" = "RSA";
+
+/* Class = "UIButton"; normalTitle = "Decrypt Message"; ObjectID = "fkX-tB-MO8"; */
+"fkX-tB-MO8.normalTitle" = "Decrypt Message";
+
+/* Class = "UITextView"; text = "Mobile: Base64 Encoded Public Key"; ObjectID = "gpb-5K-GVx"; */
+"gpb-5K-GVx.text" = "Mobile: Base64 Encoded Public Key";
+
+/* Class = "UITextView"; text = "Server: Base64 Encoded Public Key"; ObjectID = "r4j-nB-MIR"; */
+"r4j-nB-MIR.text" = "Server: Base64 Encoded Public Key";
