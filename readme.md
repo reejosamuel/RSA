@@ -1,17 +1,22 @@
-# RSA
-### Simplest RSA Wrapper
+# RSA in iOS
+### RSA wrapper in ObjectiveC and Quick sample project to test
 
 ---
 
-Internet has very little to offer for RSA on iOS. Over complicated code, no documentation or using 3rd Part Frameworks when it can be done using native `Security` framework on iOS
+Internet had very little to offer for RSA on iOS (at the time of first commit). Over complicated code, no documentation or required using 3rd Party Frameworks. 
 
-![Screen Shot](screenshot.png)
+This can be done natively on iOS using the `Security` framework. So to save future readers some time, this project was put together.
+
+<p align="center">
+  <img alt="" src="1.png" width="220">
+  <img alt="" src="2.png" width="220">
+  <img alt="" src="3.png" width="220">
+  <img alt="" src="4.png" width="220">
+  <img alt="" src="5.png" width="220">
+</p>
 
 
-
-Note: Most methods return Base64 encoded strings.
 ### RSA.h
-
 
 ```
 // Start a instance using +(void)sharedInstance
@@ -27,9 +32,25 @@ Note: Most methods return Base64 encoded strings.
 
 ```
 // Call this to generate the a pair of public and private keys for the mobile
-- (void)generateKeyPairRSACompleteBlock:(GenerateSuccessBlock)_success;
+- (void)generateRSAKeyPair:(RSACompletionBlock)completion;
 ```
 
+##### Helper Methods
+```
+// Set the key size of RSA.
+// enum RSAKeySize
+//    k512 = 512
+//    k768 = 768
+//    k1024 = 1024
+//    k2048 = 2048
+
+- (void)setRSAKeySize:(RSAKeySize)keySize;
+
+
+// Use this to remove the PEM encoding
+- (NSString *)stripPEM:(NSString *)keyString;
+
+```
 
 ##### Encryption Methods
 ```
@@ -49,7 +70,7 @@ Note: Most methods return Base64 encoded strings.
 - (NSString *)getPublicKeyAsBase64;
 ```
 
-##### Encrypt using Server Public Key
+##### Encrypt using Server's Public Key
 ```
 // Use setPublicKey before using this method to set the server public key
 - (NSString *)encryptUsingServerPublicKeyWithData:(NSData *)data;
@@ -60,19 +81,16 @@ Note: Most methods return Base64 encoded strings.
 
 
 ### Have a Java Backened ?
-##### It needs small modification for working with iOS
-
+##### It might require OID padding in the keys encoding to get it interfacing with iOS.
 
 Great many thanks to Berin for [his blog post](http://blog.wingsofhermes.org/?p=75) on getting this working. 
 
-##### SET / GET Public key for Java Servers
+##### Accessors for public key from java servers with OID in keys
 ```
 - (BOOL)setPublicKeyFromJavaServer:(NSString *)keyAsBase64;
 - (NSString *)getPublicKeyAsBase64ForJavaServer;
 ```
-  
-  
-  
+
 
 
 
