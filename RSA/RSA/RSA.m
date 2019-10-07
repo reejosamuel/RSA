@@ -354,26 +354,34 @@ size_t encodeLength(unsigned char * buf, size_t length) {
 - (NSData *)readKeyBits:(NSData *)tag keyType:(CFTypeRef)keyType {
     
     OSStatus sanityCheck = noErr;
-	CFTypeRef  _publicKeyBitsReference = NULL;
+	CFTypeRef  _keyBitsReference = NULL;
 	
-	NSMutableDictionary * queryPublicKey = [NSMutableDictionary dictionaryWithCapacity:0];
+	NSMutableDictionary * queryKey = [NSMutableDictionary dictionaryWithCapacity:0];
     
 	// Set the public key query dictionary.
-	[queryPublicKey setObject:(__bridge id)kSecClassKey forKey:(__bridge id)kSecClass];
-	[queryPublicKey setObject:tag forKey:(__bridge id)kSecAttrApplicationTag];
-	[queryPublicKey setObject:(__bridge id)keyType forKey:(__bridge id)kSecAttrKeyType];
-	[queryPublicKey setObject:[NSNumber numberWithBool:YES] forKey:(__bridge id)kSecReturnData];
+	[queryKey setObject:(__bridge id)kSecClassKey forKey:(__bridge id)kSecClass];
+	[queryKey setObject:tag forKey:(__bridge id)kSecAttrApplicationTag];
+	[queryKey setObject:(__bridge id)keyType forKey:(__bridge id)kSecAttrKeyType];
+	[queryKey setObject:[NSNumber numberWithBool:YES] forKey:(__bridge id)kSecReturnData];
     
 	// Get the key bits.
-	sanityCheck = SecItemCopyMatching((__bridge CFDictionaryRef)queryPublicKey, (CFTypeRef *)&_publicKeyBitsReference);
+	sanityCheck = SecItemCopyMatching((__bridge CFDictionaryRef)queryKey, (CFTypeRef *)&_keyBitsReference);
     
 	if (sanityCheck != noErr) {
-		_publicKeyBitsReference = NULL;
+		_keyBitsReference = NULL;
 	}
-    
-    publicKeyRef = (SecKeyRef)_publicKeyBitsReference;
-    
-	return (__bridge NSData*)_publicKeyBitsReference;
+	
+	if (tag == publicTag) {
+		publicKeyRef = (SecKeyRef)_keyBitsReference;
+	} else if (tag == privateTag) {
+		privateKeyRef = (SecKeyRef)_keyBitsReference;
+	} else if (tag == serverPublicTag) {
+		serverPublicRef = (SecKeyRef)_keyBitsReference;
+	} else {
+		NSLog(@"Error - unknown tag!");
+	}
+	
+	return (__bridge NSData*)_keyBitsReference;
 
 }
 
@@ -396,27 +404,49 @@ size_t encodeLength(unsigned char * buf, size_t length) {
     
     OSStatus resultCode = noErr;
     
-    NSMutableDictionary * queryPublicKey = [NSMutableDictionary dictionaryWithCapacity:0];
+    NSMutableDictionary * queryKey = [NSMutableDictionary dictionaryWithCapacity:0];
     
     // Set the public key query dictionary.
-    [queryPublicKey setObject:(__bridge id)kSecClassKey forKey:(__bridge id)kSecClass];
+    [queryKey setObject:(__bridge id)kSecClassKey forKey:(__bridge id)kSecClass];
     
-    [queryPublicKey setObject:tag forKey:(__bridge id)kSecAttrApplicationTag];
+    [queryKey setObject:tag forKey:(__bridge id)kSecAttrApplicationTag];
     
-    [queryPublicKey setObject:(__bridge id)kSecAttrKeyTypeRSA forKey:(__bridge id)kSecAttrKeyType];
+    [queryKey setObject:(__bridge id)kSecAttrKeyTypeRSA forKey:(__bridge id)kSecAttrKeyType];
     
-    [queryPublicKey setObject:[NSNumber numberWithBool:YES] forKey:(__bridge id)kSecReturnRef];
+    [queryKey setObject:[NSNumber numberWithBool:YES] forKey:(__bridge id)kSecReturnRef];
     
     // Get the key.
-    resultCode = SecItemCopyMatching((__bridge CFDictionaryRef)queryPublicKey, (CFTypeRef *)&publicKeyRef);
+	if (tag == publicTag) {
+		resultCode = SecItemCopyMatching((__bridge CFDictionaryRef)queryKey, (CFTypeRef *)&publicKeyRef);
+
+		if(resultCode != noErr) {
+			NSLog(@"resultCode error: %d", (int)resultCode);
+			publicKeyRef = NULL;
+		}
+
+	} else if (tag == privateTag) {
+		resultCode = SecItemCopyMatching((__bridge CFDictionaryRef)queryKey, (CFTypeRef *)&privateKeyRef);
+
+		if(resultCode != noErr) {
+			NSLog(@"resultCode error: %d", resultCode);
+			privateKeyRef = NULL;
+		}
+
+	} else if (tag == serverPublicTag) {
+		resultCode = SecItemCopyMatching((__bridge CFDictionaryRef)queryKey, (CFTypeRef *)&serverPublicRef);
+
+		if(resultCode != noErr) {
+			NSLog(@"resultCode error: %d", resultCode);
+			serverPublicRef = NULL;
+		}
+	} else {
+		NSLog(@"Error - unknown tag!");
+	}
+	
     //NSLog(@"getPublicKey: result code: %ld", resultCode);
     
-    if(resultCode != noErr)
-    {
-        publicKeyRef = NULL;
-    }
-    
-    queryPublicKey =nil;
+	
+    queryKey = nil;
 }
 
 
@@ -424,19 +454,20 @@ size_t encodeLength(unsigned char * buf, size_t length) {
 
 - (NSString *)rsaEncryptWithData:(NSData*)data usingPublicKey:(BOOL)usePublicKey server:(BOOL)isServer{
     
-    
+	SecKeyRef key;
+	
     if (isServer) {
         [self getKeyRefFor:serverPublicTag];
+		key = self.serverPublicRef;
     } else {
         if (usePublicKey) {
             [self getKeyRefFor:publicTag];
+			key = self.publicKeyRef;
         } else {
             [self getKeyRefFor:privateTag];
+			key = self.privateKeyRef;
         }
     }
-    
-    SecKeyRef key = self.publicKeyRef;
-
     
     size_t cipherBufferSize = SecKeyGetBlockSize(key);
     uint8_t *cipherBuffer = malloc(cipherBufferSize * sizeof(uint8_t));
@@ -476,12 +507,19 @@ size_t encodeLength(unsigned char * buf, size_t length) {
     return [encryptedData base64EncodedStringWithOptions:0];
 }
 
-- (NSString *)rsaDecryptWithData:(NSData*)data usingPublicKey:(BOOL)yes{
+- (NSString *)rsaDecryptWithData:(NSData*)data usingPublicKey:(BOOL)usePublicKey{
     NSData *wrappedSymmetricKey = data;
-    SecKeyRef key = yes?self.publicKeyRef:self.privateKeyRef;
-    
-//    key = [self getPrivateKeyRef]; // reejo remove
-    
+	
+	SecKeyRef key;
+	
+	if (usePublicKey) {
+		[self getKeyRefFor:publicTag];
+		key = publicKeyRef;
+	} else {
+		[self getKeyRefFor:privateTag];
+		key = privateKeyRef;
+	}
+	
     size_t cipherBufferSize = SecKeyGetBlockSize(key);
     size_t keyBufferSize = [wrappedSymmetricKey length];
     
